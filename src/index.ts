@@ -12,7 +12,7 @@ class HitAndBlow {
   private readonly answerSource = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
   private answer: string[] = []
   private tryCount = 0
-  private mode: 'normal' | 'hard'
+  private mode: 'normal' | 'hard' | 'very hard'
 
   constructor(mode: 'normal' | 'hard') {
     this.mode = mode
@@ -89,6 +89,17 @@ class HitAndBlow {
         return 3
       case 'hard':
         return 4
+      case 'very hard':
+        return 5
+      default:
+        /*
+        こいついるの？→never型になる
+          どんな値も入らない型になるため、'test'とか入力してもエラー吐く
+          throw new Error(`${this.mode}は無効なモードです。`)
+          ↑このままだとモードを追加したときに、毎回caseを修正する必要がある
+        */
+        const neverVaule: never = this.mode
+        throw new Error(`${this.mode}は無効なモードです。`)
     }
   }
 }
