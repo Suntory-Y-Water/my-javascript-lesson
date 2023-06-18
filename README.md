@@ -1,1 +1,3 @@
-"# my-javascript-lesson" 
+# TypeScript handson!
+
+練習用のリポジトリ
