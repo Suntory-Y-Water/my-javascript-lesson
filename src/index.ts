@@ -8,17 +8,28 @@ const promptInput = async (text: string) => {
   return input.trim()
 }
 
+/*
+型エイリアスを使用することで、同じ言葉を使い回せて、型に名前をつけることができる
+冗長性を排除できる
+*/
+type Mode = 'normal' | 'hard' | 'very hard'
 class HitAndBlow {
   private readonly answerSource = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
   private answer: string[] = []
   private tryCount = 0
-  private mode: 'normal' | 'hard' | 'very hard'
+  private mode: Mode = 'normal'
 
-  constructor(mode: 'normal' | 'hard') {
-    this.mode = mode
-  }
+  async setting() {
+    /* 
+    型アサーション
+    this.mode = await promptInput('モードを入力してください')
+    この状態だとthis.modeがMode型しか受け付けないので、string型を受け取るとエラーになる
 
-  setting() {
+    Mode型は元々はstring型の文字列を扱っている
+    as Modeをつけることでstring(3つのmodeを)をMode型として解釈することができる
+    →この段階ではまだMode型以外の文字列も受け付けてしまうので、そこを排除していく
+    */
+    this.mode = await promptInput('モードを入力してください') as Mode
     const answerLength = this.getAnswerLength()
 
     while (this.answer.length < answerLength) {
@@ -105,8 +116,8 @@ class HitAndBlow {
 }
 
 ;(async () => {
-  const hitAndBlow = new HitAndBlow('normal')
-  hitAndBlow.setting()
+  const hitAndBlow = new HitAndBlow()
+  await hitAndBlow.setting()
   await hitAndBlow.play()
   hitAndBlow.end()
 })();
